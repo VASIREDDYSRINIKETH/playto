@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import './index.css'
 
 // Replace with your actual backend URL when hosting, assuming local dev setup
-const API_URL = 'http://localhost:8000/api/v1'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
 
 function App() {
   const [merchants, setMerchants] = useState([]);

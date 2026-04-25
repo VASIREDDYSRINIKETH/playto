@@ -57,20 +57,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'payout_engine.wsgi.application'
 
+import dj_database_url
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('POSTGRES_DB', 'payout_db'),
         'USER': os.environ.get('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '12345'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),  # 'db' for docker-compose, 'localhost' otherwise
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
         'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
 
-# Override default for local non-docker testing easily
-if not os.environ.get('IN_DOCKER'):
-    DATABASES['default']['HOST'] = 'localhost'
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 AUTH_PASSWORD_VALIDATORS = []
 LANGUAGE_CODE = 'en-us'
