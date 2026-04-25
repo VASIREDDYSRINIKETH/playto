@@ -18,6 +18,12 @@ class ApiConfig(AppConfig):
                         'repeats': -1
                     }
                 )
+                
+                # Seed the cloud database with a test merchant if it's empty!
+                from .models import Merchant, Ledger
+                if not Merchant.objects.exists():
+                    m = Merchant.objects.create(name='Live Test Merchant')
+                    Ledger.objects.create(merchant=m, amount=10000000, entry_type='CREDIT', purpose='INITIAL_TEST_DEPOSIT')
             except (ProgrammingError, OperationalError):
                 pass
         except ImportError:
